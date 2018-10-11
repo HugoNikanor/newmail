@@ -8,7 +8,7 @@ while [ "$1" ]; do
 		-s|--silent) info="" ;;
 		-h|--help)
 			cat <<- EOF
-			Source located at $(cd $(dirname $0) && pwd)/$(basename $0), read that.
+			Source located at $(realpath $0), read that.
 			EOF
 			exit
 			;;
@@ -22,4 +22,4 @@ done
 
 find ~/mail -type f \
 	| grep -oP '(?<=mail/)[^/]+/[^/]+(?=/new/)' \
-	| awk -f $(dirname $0)/newmail.awk
+	| awk -f $(dirname $(realpath $0))/newmail.awk
