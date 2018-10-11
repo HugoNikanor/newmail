@@ -1,0 +1,25 @@
+#!/bin/bash
+
+info="1"
+totalonly=""
+
+while [ "$1" ]; do
+	case $1 in
+		-s|--silent) info="" ;;
+		-h|--help)
+			cat <<- EOF
+			Source located at $(cd $(dirname $0) && pwd)/$(basename $0), read that.
+			EOF
+			exit
+			;;
+		-t|--total)
+			totalonly="1"
+			info=""
+			;;
+	esac;
+	shift
+done
+
+find ~/mail -type f \
+	| grep -oP '(?<=mail/)[^/]+/[^/]+(?=/new/)' \
+	| awk -f $(dirname $0)/newmail.awk
