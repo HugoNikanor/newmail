@@ -21,12 +21,14 @@ def plural(count):
     return "es" if count != 0 else ""
 
 if __name__ == "__main__":
-    gen = os.walk(mailroot)
+    gen = os.walk(mailroot, topdown=True)
     accounts = []
     for (path, dirs, files) in gen:
-        if dirs == ["tmp", "cur", "new"]:
-            tmp = next(gen)
-            cur = next(gen)
+        # print(path, sorted(dirs))
+        if sorted(dirs) == ["cur", "new", "tmp"]:
+            dirs.remove("cur")
+            dirs.remove("tmp")
+
             (_, _, files) = next(gen)
             count = len(files)
             if count != 0:
