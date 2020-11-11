@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 import os
+import time
+import argparse
 
-mailroot = "/home/hugo/mail"
+mailroot = "/var/mail/hugo"
 
 def p(path):
     """prettify path"""
@@ -20,7 +22,7 @@ def c(count):
 def plural(count):
     return "es" if count != 0 else ""
 
-if __name__ == "__main__":
+def newmail():
     gen = os.walk(mailroot, topdown=True)
     accounts = []
     for (path, dirs, files) in gen:
@@ -39,3 +41,23 @@ if __name__ == "__main__":
 
     l = len(accounts)
     print(f"\nNew mail in {c(l)}{l}\x1b[m mailbox{plural(l)}.")
+
+parser = argparse.ArgumentParser()
+parser.add_argument('--watch', action="store_true")
+args = parser.parse_args()
+
+if __name__ == "__main__":
+    if args.watch:
+        os.system("tput civis") # setterm --cursor off
+        while True:
+            print("\033[H\033[J", end="")
+            print(time.ctime())
+            print("")
+            newmail()
+            try:
+                time.sleep(1)
+            except KeyboardInterrupt:
+                break
+        os.system("tput cnorm") # setterm --cursor on
+    else:
+        newmail()
