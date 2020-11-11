@@ -36,11 +36,11 @@ def newmail():
             if count != 0:
                 accounts.append((path, count))
 
-    for (path, count) in sorted(accounts, key=lambda p: p[0]):
-        print(f"{c(count)}{count:>6}\x1b[m {p(path)}")
 
+    output = '\n'.join(f"{c(count)}{count:>6}\x1b[m {p(path)}" for (path, count) in sorted(accounts, key=lambda p: p[0]))
     l = len(accounts)
-    print(f"\nNew mail in {c(l)}{l}\x1b[m mailbox{plural(l)}.")
+    output += f"\n\nNew mail in {c(l)}{l}\x1b[m mailbox{plural(l)}."
+    return output
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--watch', action="store_true")
@@ -50,14 +50,13 @@ if __name__ == "__main__":
     if args.watch:
         os.system("tput civis") # setterm --cursor off
         while True:
-            print("\033[H\033[J", end="")
-            print(time.ctime())
-            print("")
-            newmail()
+            output = newmail()
+            now = time.ctime()
+            print(f"\033[H\033[J{now}\n\n{output}")
             try:
                 time.sleep(1)
             except KeyboardInterrupt:
                 break
         os.system("tput cnorm") # setterm --cursor on
     else:
-        newmail()
+        print(newmail())
