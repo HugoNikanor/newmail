@@ -3,7 +3,8 @@ import os
 import time
 import argparse
 
-mailroot = "/var/mail/hugo"
+mailroot = os.getenv("MAILPATH") or "/var/mail/"
+
 
 def p(path):
     """prettify path"""
