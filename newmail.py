@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import os
+import re
 import time
 import argparse
 
@@ -7,7 +8,7 @@ mailroot = "/var/mail/hugo"
 
 def p(path):
     """prettify path"""
-    return path[len(mailroot) + 1:]
+    return re.sub('INBOX', '\x1b[1mINBOX\x1b[m', path[len(mailroot) + 1:])
 
 def c(count):
     if count < 10:
