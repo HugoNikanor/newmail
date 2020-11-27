@@ -48,6 +48,8 @@ args = parser.parse_args()
 
 if __name__ == "__main__":
     if args.watch:
+        # set terminal title
+        print("\x1b]0;Newmail\007")
         os.system("tput civis") # setterm --cursor off
         while True:
             output = newmail()
