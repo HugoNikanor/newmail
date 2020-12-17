@@ -50,16 +50,20 @@ args = parser.parse_args()
 if __name__ == "__main__":
     if args.watch:
         # set terminal title
-        print("\x1b]0;Newmail\007")
-        os.system("tput civis") # setterm --cursor off
-        while True:
-            output = newmail()
-            now = time.ctime()
-            print(f"\033[H\033[J{now}\n\n{output}")
-            try:
-                time.sleep(1)
-            except KeyboardInterrupt:
-                break
-        os.system("tput cnorm") # setterm --cursor on
+        try:
+            print("\x1b]0;Newmail\007")
+            print("\x1b[?1049h", end='')
+            os.system("tput civis") # setterm --cursor off
+            while True:
+                output = newmail()
+                now = time.ctime()
+                print(f"\033[H\033[J{now}\n\n{output}")
+                try:
+                    time.sleep(1)
+                except KeyboardInterrupt:
+                    break
+        finally:
+            print("\x1b[?1049l", end='')
+            os.system("tput cnorm") # setterm --cursor on
     else:
         print(newmail())
